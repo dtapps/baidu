@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-type ReverseGeocodingResponse struct {
+type MapReverseGeocodingResponse struct {
 	Status int `json:"status"`
 	Result struct {
 		Location struct {
@@ -41,31 +41,31 @@ type ReverseGeocodingResponse struct {
 	} `json:"result"`
 }
 
-type ReverseGeocodingResult struct {
-	Result ReverseGeocodingResponse // 结果
-	Body   []byte                   // 内容
-	Http   gorequest.Response       // 请求
+type MapReverseGeocodingResult struct {
+	Result MapReverseGeocodingResponse // 结果
+	Body   []byte                      // 内容
+	Http   gorequest.Response          // 请求
 }
 
-func newReverseGeocodingResult(result ReverseGeocodingResponse, body []byte, http gorequest.Response) *ReverseGeocodingResult {
-	return &ReverseGeocodingResult{Result: result, Body: body, Http: http}
+func newMapReverseGeocodingResult(result MapReverseGeocodingResponse, body []byte, http gorequest.Response) *MapReverseGeocodingResult {
+	return &MapReverseGeocodingResult{Result: result, Body: body, Http: http}
 }
 
-// ReverseGeocoding 全球逆地理编码服务
-// https://lbsyun.baidu.com/index.php?title=webapi/guide/webservice-geocoding-abroad
-func (c *Client) ReverseGeocoding(ctx context.Context, location string, notMustParams ...gorequest.Params) (*ReverseGeocodingResult, error) {
+// V3 全球逆地理编码
+// https://lbsyun.baidu.com/faq/api?title=webapi/guide/webservice-geocoding-abroad-base
+func (mcg *MapReverseGeocoding) V3(ctx context.Context, location string, notMustParams ...gorequest.Params) (*MapReverseGeocodingResult, error) {
 	// 参数
 	params := gorequest.NewParamsWith(notMustParams...)
-	params.Set("ak", c.ak)
+	params.Set("ak", mcg.mc.ak)
 	params.Set("location", location)
 	params.Set("output", "json")
 	// 请求
-	request, err := c.request(ctx, apiUrl+"/reverse_geocoding/v3/", params, http.MethodGet)
+	request, err := mcg.mc.request(ctx, "/reverse_geocoding/v3/", params, http.MethodGet)
 	if err != nil {
-		return newReverseGeocodingResult(ReverseGeocodingResponse{}, request.ResponseBody, request), err
+		return newMapReverseGeocodingResult(MapReverseGeocodingResponse{}, request.ResponseBody, request), err
 	}
 	// 定义
-	var response ReverseGeocodingResponse
+	var response MapReverseGeocodingResponse
 	err = gojson.Unmarshal(request.ResponseBody, &response)
-	return newReverseGeocodingResult(response, request.ResponseBody, request), err
+	return newMapReverseGeocodingResult(response, request.ResponseBody, request), err
 }

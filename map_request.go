@@ -5,13 +5,13 @@ import (
 	"go.dtapp.net/gorequest"
 )
 
-func (c *Client) request(ctx context.Context, url string, param gorequest.Params, method string) (gorequest.Response, error) {
+func (mc *MapClient) request(ctx context.Context, url string, param gorequest.Params, method string) (gorequest.Response, error) {
 
 	// 创建请求
 	client := gorequest.NewHttp()
 
 	// 设置请求地址
-	client.SetUri(url)
+	client.SetUri(MapApiUrl + url)
 
 	// 设置方式
 	client.SetMethod(method)
@@ -29,8 +29,8 @@ func (c *Client) request(ctx context.Context, url string, param gorequest.Params
 	}
 
 	// 记录日志
-	if c.gormLog.status {
-		go c.gormLog.client.Middleware(ctx, request)
+	if mc.gormLog.status {
+		go mc.gormLog.client.Middleware(ctx, request)
 	}
 
 	return request, err

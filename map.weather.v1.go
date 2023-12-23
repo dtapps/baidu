@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-type WeatherResponse struct {
+type MapWeatherResponse struct {
 	Status int `json:"status"`
 	Result struct {
 		Location struct {
@@ -73,31 +73,31 @@ type WeatherResponse struct {
 	Message string `json:"message"`
 }
 
-type WeatherResult struct {
-	Result WeatherResponse    // 结果
+type MapWeatherResult struct {
+	Result MapWeatherResponse // 结果
 	Body   []byte             // 内容
 	Http   gorequest.Response // 请求
 }
 
-func newWeatherResult(result WeatherResponse, body []byte, http gorequest.Response) *WeatherResult {
-	return &WeatherResult{Result: result, Body: body, Http: http}
+func newMapWeatherResult(result MapWeatherResponse, body []byte, http gorequest.Response) *MapWeatherResult {
+	return &MapWeatherResult{Result: result, Body: body, Http: http}
 }
 
-// Weather 国内天气查询服务
+// V1 国内天气查询
 // https://lbsyun.baidu.com/index.php?title=webapi/weather
-func (c *Client) Weather(ctx context.Context, districtId string, notMustParams ...gorequest.Params) (*WeatherResult, error) {
+func (mcw *MapWeather) V1(ctx context.Context, districtId string, notMustParams ...gorequest.Params) (*MapWeatherResult, error) {
 	// 参数
 	params := gorequest.NewParamsWith(notMustParams...)
-	params.Set("ak", c.ak)
+	params.Set("ak", mcw.mc.ak)
 	params.Set("district_id", districtId)
 	params.Set("output", "json")
 	// 请求
-	request, err := c.request(ctx, apiUrl+"/weather/v1/", params, http.MethodGet)
+	request, err := mcw.mc.request(ctx, "/weather/v1/", params, http.MethodGet)
 	if err != nil {
-		return newWeatherResult(WeatherResponse{}, request.ResponseBody, request), err
+		return newMapWeatherResult(MapWeatherResponse{}, request.ResponseBody, request), err
 	}
 	// 定义
-	var response WeatherResponse
+	var response MapWeatherResponse
 	err = gojson.Unmarshal(request.ResponseBody, &response)
-	return newWeatherResult(response, request.ResponseBody, request), err
+	return newMapWeatherResult(response, request.ResponseBody, request), err
 }
