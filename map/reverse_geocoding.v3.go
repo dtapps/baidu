@@ -52,7 +52,7 @@ func newReverseGeocodingV3Result(result ReverseGeocodingV3Response, body []byte,
 }
 
 // ReverseGeocodingV3 全球逆地理编码服务
-// https://lbsyun.baidu.com/index.php?title=webapi/guide/webservice-geocoding-abroad
+// https://lbsyun.baidu.com/faq/api?title=webapi/guide/webservice-geocoding-abroad-base
 func (c *Client) ReverseGeocodingV3(ctx context.Context, location string, notMustParams ...gorequest.Params) (*ReverseGeocodingV3Result, error) {
 	// 参数
 	params := gorequest.NewParamsWith(notMustParams...)

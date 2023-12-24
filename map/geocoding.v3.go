@@ -35,7 +35,7 @@ func newGeocodingV3Result(result GeocodingV3Response, body []byte, http goreques
 }
 
 // GeocodingV3 地理编码服务
-// https://lbsyun.baidu.com/index.php?title=webapi/guide/webservice-geocoding
+// https://lbsyun.baidu.com/faq/api?title=webapi/guide/webservice-geocoding-base
 func (c *Client) GeocodingV3(ctx context.Context, address string, notMustParams ...gorequest.Params) (*GeocodingV3Result, error) {
 	// 参数
 	params := gorequest.NewParamsWith(notMustParams...)

@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-type WeatherV1Response struct {
+type WeatherAbroadV1Response struct {
 	Status int `json:"status"`
 	Result struct {
 		Location struct {
@@ -73,30 +73,30 @@ type WeatherV1Response struct {
 	Message string `json:"message"`
 }
 
-type WeatherV1Result struct {
-	Result WeatherV1Response  // 结果
-	Body   []byte             // 内容
-	Http   gorequest.Response // 请求
+type WeatherAbroadV1Result struct {
+	Result WeatherAbroadV1Response // 结果
+	Body   []byte                  // 内容
+	Http   gorequest.Response      // 请求
 }
 
-func newWeatherV1Result(result WeatherV1Response, body []byte, http gorequest.Response) *WeatherV1Result {
-	return &WeatherV1Result{Result: result, Body: body, Http: http}
+func newWeatherAbroadV1Result(result WeatherAbroadV1Response, body []byte, http gorequest.Response) *WeatherAbroadV1Result {
+	return &WeatherAbroadV1Result{Result: result, Body: body, Http: http}
 }
 
-// WeatherV1 国内天气查询服务
-// https://lbsyun.baidu.com/index.php?title=webapi/weather
-func (c *Client) WeatherV1(ctx context.Context, notMustParams ...gorequest.Params) (*WeatherV1Result, error) {
+// WeatherAbroadV1 海外天气查询
+// https://lbsyun.baidu.com/faq/api?title=webapi/weather-abroad
+func (c *Client) WeatherAbroadV1(ctx context.Context, notMustParams ...gorequest.Params) (*WeatherAbroadV1Result, error) {
 	// 参数
 	params := gorequest.NewParamsWith(notMustParams...)
-	params.Set("ak", c.ak)       // 开发者密钥
-	params.Set("output", "json") // 返回格式，目前支持json/xml
+	params.Set("ak", c.ak)
+	params.Set("output", "json")
 	// 请求
-	request, err := c.request(ctx, apiUrl+"/weather/v1/", params, http.MethodGet)
+	request, err := c.request(ctx, apiUrl+"/weather_abroad/v1/", params, http.MethodGet)
 	if err != nil {
-		return newWeatherV1Result(WeatherV1Response{}, request.ResponseBody, request), err
+		return newWeatherAbroadV1Result(WeatherAbroadV1Response{}, request.ResponseBody, request), err
 	}
 	// 定义
-	var response WeatherV1Response
+	var response WeatherAbroadV1Response
 	err = gojson.Unmarshal(request.ResponseBody, &response)
-	return newWeatherV1Result(response, request.ResponseBody, request), err
+	return newWeatherAbroadV1Result(response, request.ResponseBody, request), err
 }
