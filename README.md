@@ -1,8 +1,8 @@
 <h1>
-<a href="https://www.dtapp.net/">Golang baidu</a>
+<a href="https://www.dtapp.net/">Golang</a>
 </h1>
 
-📦 Golang baidu
+📦 Golang 百度SDK
 
 [comment]: <> (go)
 [![godoc](https://pkg.go.dev/badge/go.dtapp.net/baidu?status.svg)](https://pkg.go.dev/go.dtapp.net/baidu)
@@ -13,5 +13,5 @@
 #### 安装
 
 ```shell
-go get -v -u go.dtapp.net/baidu@v1.0.0
+go get -v -u go.dtapp.net/baidu@v1.0.1
 ```

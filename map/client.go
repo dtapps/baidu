@@ -1,11 +1,11 @@
-package baidu
+package _map
 
 import (
 	"context"
 	"go.dtapp.net/golog"
 )
 
-type MapClient struct {
+type Client struct {
 	ak      string
 	gormLog struct {
 		status bool           // 状态
@@ -13,6 +13,7 @@ type MapClient struct {
 	}
 }
 
-func NewMapClient(ctx context.Context, ak string) (*MapClient, error) {
-	return &MapClient{ak: ak}, nil
+// NewClient 创建实例化
+func NewClient(ctx context.Context, ak string) (*Client, error) {
+	return &Client{ak: ak}, nil
 }

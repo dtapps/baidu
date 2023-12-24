@@ -1,17 +1,17 @@
-package baidu
+package _map
 
 import (
 	"context"
 	"go.dtapp.net/gorequest"
 )
 
-func (mc *MapClient) request(ctx context.Context, url string, param gorequest.Params, method string) (gorequest.Response, error) {
+func (c *Client) request(ctx context.Context, url string, param gorequest.Params, method string) (gorequest.Response, error) {
 
 	// 创建请求
 	client := gorequest.NewHttp()
 
 	// 设置请求地址
-	client.SetUri(MapApiUrl + url)
+	client.SetUri(url)
 
 	// 设置方式
 	client.SetMethod(method)
@@ -29,8 +29,8 @@ func (mc *MapClient) request(ctx context.Context, url string, param gorequest.Pa
 	}
 
 	// 记录日志
-	if mc.gormLog.status {
-		go mc.gormLog.client.Middleware(ctx, request)
+	if c.gormLog.status {
+		go c.gormLog.client.Middleware(ctx, request)
 	}
 
 	return request, err

@@ -1,4 +1,4 @@
-package baidu
+package _map
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-type MapWeatherResponse struct {
+type WeatherV1Response struct {
 	Status int `json:"status"`
 	Result struct {
 		Location struct {
@@ -73,31 +73,31 @@ type MapWeatherResponse struct {
 	Message string `json:"message"`
 }
 
-type MapWeatherResult struct {
-	Result MapWeatherResponse // 结果
+type WeatherV1Result struct {
+	Result WeatherV1Response  // 结果
 	Body   []byte             // 内容
 	Http   gorequest.Response // 请求
 }
 
-func newMapWeatherResult(result MapWeatherResponse, body []byte, http gorequest.Response) *MapWeatherResult {
-	return &MapWeatherResult{Result: result, Body: body, Http: http}
+func newWeatherV1Result(result WeatherV1Response, body []byte, http gorequest.Response) *WeatherV1Result {
+	return &WeatherV1Result{Result: result, Body: body, Http: http}
 }
 
-// V1 国内天气查询
+// WeatherV1 国内天气查询服务
 // https://lbsyun.baidu.com/index.php?title=webapi/weather
-func (mcw *MapWeather) V1(ctx context.Context, districtId string, notMustParams ...gorequest.Params) (*MapWeatherResult, error) {
+func (c *Client) WeatherV1(ctx context.Context, districtId string, notMustParams ...gorequest.Params) (*WeatherV1Result, error) {
 	// 参数
 	params := gorequest.NewParamsWith(notMustParams...)
-	params.Set("ak", mcw.mc.ak)
+	params.Set("ak", c.ak)
 	params.Set("district_id", districtId)
 	params.Set("output", "json")
 	// 请求
-	request, err := mcw.mc.request(ctx, "/weather/v1/", params, http.MethodGet)
+	request, err := c.request(ctx, apiUrl+"/weather/v1/", params, http.MethodGet)
 	if err != nil {
-		return newMapWeatherResult(MapWeatherResponse{}, request.ResponseBody, request), err
+		return newWeatherV1Result(WeatherV1Response{}, request.ResponseBody, request), err
 	}
 	// 定义
-	var response MapWeatherResponse
+	var response WeatherV1Response
 	err = gojson.Unmarshal(request.ResponseBody, &response)
-	return newMapWeatherResult(response, request.ResponseBody, request), err
+	return newWeatherV1Result(response, request.ResponseBody, request), err
 }

@@ -1,4 +1,4 @@
-package baidu
+package _map
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-type MapLocationIpResponse struct {
+type LocationIpResponse struct {
 	Address string `json:"address"` // 详细地址信息
 	Content struct {
 		AddressDetail struct {
@@ -28,30 +28,30 @@ type MapLocationIpResponse struct {
 	Status int `json:"status"`
 }
 
-type MapLocationIpResult struct {
-	Result MapLocationIpResponse // 结果
-	Body   []byte                // 内容
-	Http   gorequest.Response    // 请求
+type LocationIpResult struct {
+	Result LocationIpResponse // 结果
+	Body   []byte             // 内容
+	Http   gorequest.Response // 请求
 }
 
-func newMapLocationIpResult(result MapLocationIpResponse, body []byte, http gorequest.Response) *MapLocationIpResult {
-	return &MapLocationIpResult{Result: result, Body: body, Http: http}
+func newLocationIpResult(result LocationIpResponse, body []byte, http gorequest.Response) *LocationIpResult {
+	return &LocationIpResult{Result: result, Body: body, Http: http}
 }
 
-// Ip 普通IP定位
-// https://lbsyun.baidu.com/faq/api?title=webapi/ip-api-base
-func (mcl *MapLocation) Ip(ctx context.Context, ip string, notMustParams ...gorequest.Params) (*MapLocationIpResult, error) {
+// LocationIp 普通IP定位
+// https://lbsyun.baidu.com/index.php?title=webapi/ip-api
+func (c *Client) LocationIp(ctx context.Context, ip string, notMustParams ...gorequest.Params) (*LocationIpResult, error) {
 	// 参数
 	params := gorequest.NewParamsWith(notMustParams...)
-	params.Set("ak", mcl.mc.ak)
+	params.Set("ak", c.ak)
 	params.Set("ip", ip)
 	// 请求
-	request, err := mcl.mc.request(ctx, "/location/ip", params, http.MethodGet)
+	request, err := c.request(ctx, apiUrl+"/location/ip", params, http.MethodGet)
 	if err != nil {
-		return newMapLocationIpResult(MapLocationIpResponse{}, request.ResponseBody, request), err
+		return newLocationIpResult(LocationIpResponse{}, request.ResponseBody, request), err
 	}
 	// 定义
-	var response MapLocationIpResponse
+	var response LocationIpResponse
 	err = gojson.Unmarshal(request.ResponseBody, &response)
-	return newMapLocationIpResult(response, request.ResponseBody, request), err
+	return newLocationIpResult(response, request.ResponseBody, request), err
 }
