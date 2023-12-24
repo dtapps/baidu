@@ -9,7 +9,7 @@ import (
 
 type Oauth2TokenResponse struct {
 	RefreshToken  string `json:"refresh_token"`  // 刷新令牌
-	ExpiresIn     int    `json:"expires_in"`     // 到期时间
+	ExpiresIn     int64  `json:"expires_in"`     // 到期时间
 	SessionKey    string `json:"session_key"`    // 会话密钥
 	AccessToken   string `json:"access_token"`   // 访问令牌
 	Scope         string `json:"scope"`          // 范围

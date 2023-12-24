@@ -8,7 +8,7 @@ import (
 )
 
 type ReverseGeocodingV3Response struct {
-	Status int `json:"status"`
+	Status int64 `json:"status"`
 	Result struct {
 		Location struct {
 			Lng float64 `json:"lng"`
@@ -18,12 +18,12 @@ type ReverseGeocodingV3Response struct {
 		Business         string `json:"business"`
 		AddressComponent struct {
 			Country         string `json:"country"`
-			CountryCode     int    `json:"country_code"`
+			CountryCode     int64  `json:"country_code"`
 			CountryCodeIso  string `json:"country_code_iso"`
 			CountryCodeIso2 string `json:"country_code_iso2"`
 			Province        string `json:"province"`
 			City            string `json:"city"`
-			CityLevel       int    `json:"city_level"`
+			CityLevel       int64  `json:"city_level"`
 			District        string `json:"district"`
 			Town            string `json:"town"`
 			TownCode        string `json:"town_code"`
@@ -37,7 +37,7 @@ type ReverseGeocodingV3Response struct {
 		Roads              []interface{} `json:"roads"`
 		PoiRegions         []interface{} `json:"poiRegions"`
 		SematicDescription string        `json:"sematic_description"`
-		CityCode           int           `json:"cityCode"`
+		CityCode           int64         `json:"cityCode"`
 	} `json:"result"`
 }
 

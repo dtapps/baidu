@@ -11,15 +11,15 @@ import (
 )
 
 type GeocodingV3Response struct {
-	Status int `json:"status"`
+	Status int64 `json:"status"`
 	Result struct {
 		Location struct {
 			Lng float64 `json:"lng"`
 			Lat float64 `json:"lat"`
 		} `json:"location"`
-		Precise       int    `json:"precise"`
-		Confidence    int    `json:"confidence"`
-		Comprehension int    `json:"comprehension"`
+		Precise       int64  `json:"precise"`
+		Confidence    int64  `json:"confidence"`
+		Comprehension int64  `json:"comprehension"`
 		Level         string `json:"level"`
 	} `json:"result"`
 }
